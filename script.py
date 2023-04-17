@@ -43,13 +43,12 @@ table_1['year'] = patents_df['gyear']
 
 print(table_1.head(-5))
 
-print(class_df.head(5))
+print(class_df.head(-5))
 
 for i, row in table_1.iterrows():
-    for i_2, row_2 in class_df.iterrows():
-        if row_2['patent'] == row['patent']:
-            row['# of unique classes'] = row_2['class']
-            row['# of unique subclasses'] = row_2['subclass']
+    pat = row['patent']
+    row['# of unique classes'] = class_df.query('patent == @pat')['class'].sum()
+    row['# of unique subclasses'] = class_df.query('patent == @pat')['subclass'].sum()
     print(row['patent'], 'classes')
 
 table_1.to_stata('table_1.dta')
